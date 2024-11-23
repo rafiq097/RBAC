@@ -86,5 +86,35 @@ const addRole = async (req, res) => {
     }
 };
 
+const toggleStatus = async (req, res) => {
+    console.log(req);
+    try {
+        // const email = req.params.email;
+        const id = req.user.userId;
+        if (!id) {
+            return res.status(400).json({ message: 'User ID is required' });
+        }
 
-module.exports = { loginUser, getAllUsers, addRole };
+        // const user = await User.findByIdAndUpdate(id, { isActive: !user.isActive }, { new: true, runValidators: true });
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        user.isActive = !user.isActive;
+        await user.save();
+
+        console.log(user);
+
+        res.status(200).json({
+            message: 'User status toggled successfully',
+            user,
+        });
+    }
+    catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: 'An error occurred while toggling the user active' });
+    }
+};
+
+module.exports = { loginUser, getAllUsers, addRole, toggleStatus };
