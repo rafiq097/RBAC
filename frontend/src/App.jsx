@@ -15,6 +15,7 @@
   import EditSubTask from "./pages/EditSubTask.jsx";
   import ViewTask from "./pages/ViewTask.jsx";
   import AddTask from "./pages/AddTask.jsx";
+import AdminPage from "./pages/AdminPage.jsx";
 
   function App() {
     const [ userData, setUserData ] = useRecoilState(userAtom);
@@ -69,6 +70,12 @@
             path="/dashboard"
             element={
               userData?.role !== "user" ? <DashboardPage /> : <Navigate to="/" />
+            }
+          />
+          <Route
+            path="/admin-page"
+            element={
+              userData?.role !== "user" ? <AdminPage /> : <Navigate to="/" />
             }
           />
           <Route path="/task/:id" element={<EditTask />} />

@@ -117,4 +117,54 @@ const toggleStatus = async (req, res) => {
     }
 };
 
-module.exports = { loginUser, getAllUsers, addRole, toggleStatus };
+const addUser = async (req, res) => {
+    try {
+        const { name, email, role } = req.body;
+
+        if (!name || !email || !role) {
+            return res.status(400).json({ message: "Name, email, and role are required." });
+        }
+
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: "User with this email already exists." });
+        }
+
+        const newUser = new User({
+            name,
+            email,
+            role,
+        });
+
+        await newUser.save();
+
+        res.status(201).json({ message: "User added successfully!", user: newUser, userExists: existingUser });
+    } catch (error) {
+        console.error("Error adding user:", error);
+        res.status(500).json({ message: "Failed to add user. Please try again." });
+    }
+};
+
+const deleteUser = async (req, res) => {
+    try {
+      const userId = req.params.id;
+  
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required." });
+      }
+  
+      const deletedUser = await User.findByIdAndDelete(userId);
+  
+      if (!deletedUser) {
+        return res.status(404).json({ message: "User not found." });
+      }
+  
+      return res.status(200).json({ message: "User deleted successfully." });
+    } catch (error) {
+      console.error("Error deleting user:", error.message);
+      return res.status(500).json({ message: "Internal server error." });
+    }
+  };
+  
+
+module.exports = { loginUser, getAllUsers, addRole, toggleStatus, addUser, deleteUser };

@@ -52,19 +52,22 @@ function NavBar() {
   const toggleActiveStatus = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.put('/users/toggle-status', {}, {
+      const res = await axios.put(
+        "/users/toggle-status",
+        {},
+        {
           headers: {
-              Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
-      });
+        }
+      );
       toast.success("Toggled Successfully");
       setIsActive(res.data.user.isActive);
-      console.log('Updated User:', res.data.user);
-  } catch (error) {
-      console.error('Error toggling user status:', error);
-      toast.error('Failed to toggle status');
-  }
-
+      console.log("Updated User:", res.data.user);
+    } catch (error) {
+      console.error("Error toggling user status:", error);
+      toast.error("Failed to toggle status");
+    }
   };
 
   if (loading)
@@ -119,8 +122,17 @@ function NavBar() {
                   to="/dashboard"
                   className="block px-4 py-2 text-blue-500 hover:bg-gray-100"
                   onClick={() => setIsOpen(false)}
-                >
+                >a
                   Dashboard
+                </Link>
+              )}
+              {user?.role !== "user" && (
+                <Link
+                  to="/admin-page"
+                  className="block px-4 py-2 text-blue-500 hover:bg-gray-100"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Admin Page
                 </Link>
               )}
               <div className="px-4 py-2">
@@ -172,37 +184,41 @@ function NavBar() {
               <Link to="/dashboard" className="text-white hover:text-gray-200">
                 Dashboard
               </Link>
-              <div className="flex items-center space-x-2">
-                <span className="text-white">Active:</span>
-                <button
-                  className={`relative flex items-center w-16 h-8 rounded-full ${
-                    isActive ? "bg-green-500" : "bg-gray-300"
-                  } p-1 transition duration-300`}
-                  onClick={toggleActiveStatus}
-                >
-                  <span
-                    className={`absolute left-1 text-sm font-bold text-white transition duration-300 ${
-                      isActive ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    ON
-                  </span>
-                  <span
-                    className={`absolute right-1 text-sm font-bold text-gray-500 transition duration-300 ${
-                      isActive ? "opacity-0" : "opacity-100"
-                    }`}
-                  >
-                    OFF
-                  </span>
-                  <div
-                    className={`h-6 w-6 bg-white rounded-full shadow-md transform transition-transform ${
-                      isActive ? "translate-x-8" : "translate-x-0"
-                    }`}
-                  ></div>
-                </button>
-              </div>
+              <Link to="/admin-page" className="text-white hover:text-gray-200">
+                Admin Page
+              </Link>
             </div>
           )}
+
+          <div className="flex items-center space-x-2">
+            <span className="text-white">Active:</span>
+            <button
+              className={`relative flex items-center w-16 h-8 rounded-full ${
+                isActive ? "bg-green-500" : "bg-gray-300"
+              } p-1 transition duration-300`}
+              onClick={toggleActiveStatus}
+            >
+              <span
+                className={`absolute left-1 text-sm font-bold text-white transition duration-300 ${
+                  isActive ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                ON
+              </span>
+              <span
+                className={`absolute right-1 text-sm font-bold text-gray-500 transition duration-300 ${
+                  isActive ? "opacity-0" : "opacity-100"
+                }`}
+              >
+                OFF
+              </span>
+              <div
+                className={`h-6 w-6 bg-white rounded-full shadow-md transform transition-transform ${
+                  isActive ? "translate-x-8" : "translate-x-0"
+                }`}
+              ></div>
+            </button>
+          </div>
           <button
             className="flex items-center text-white hover:text-gray-200"
             onClick={handleLogout}
