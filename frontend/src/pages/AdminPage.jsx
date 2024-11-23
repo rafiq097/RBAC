@@ -133,17 +133,17 @@ function AdminPage() {
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user._id}>
-                <td className="px-4 py-2 border">{user.name}</td>
-                <td className="px-4 py-2 border">{user.email}</td>
-                <td className="px-4 py-2 border">{user.role}</td>
-                <td className="px-4 py-2 border">
+              <tr key={user._id} className="text-sm sm:text-base">
+                <td className="px-4 py-2 border break-words">{user.name}</td>
+                <td className="px-4 py-2 border break-words">{user.email}</td>
+                <td className="px-4 py-2 border break-words">{user.role}</td>
+                <td className="px-4 py-2 border break-words">
                   <select
                     value={user.role}
                     onChange={(e) =>
                       handleUpdateRole(user._id, e.target.value)
                     }
-                    className="p-2 border border-gray-300 rounded-md"
+                    className="p-2 border border-gray-300 rounded-md w-full"
                   >
                     <option value="user">User</option>
                     <option value="manager">Manager</option>
